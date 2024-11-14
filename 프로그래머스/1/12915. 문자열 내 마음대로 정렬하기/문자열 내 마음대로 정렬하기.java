@@ -1,31 +1,20 @@
 import java.util.*;
 class Solution {
     public String[] solution(String[] strings, int n) {
-       HashMap<String, List<String>> map = new HashMap<>();
-
-        // map 세팅
-        for(int i = 'a'; i <= 'z'; i++) {
-            map.put(String.valueOf((char)i), new ArrayList<>());
-        }
-
-        // map 세팅
+        List<String> arr = new ArrayList<>();
+        
         for(String str: strings) {
-            String key = String.valueOf(str.charAt(n));
-            map.get(key).add(str);
+            arr.add(String.valueOf(str.charAt(n))+str);
         }
-
-        // map 정렬
-        for(List<String> list: map.values()) {
-            Collections.sort(list);
+        
+        Collections.sort(arr);
+        
+        for(int i = 0; i< arr.size(); i++){
+            arr.set(i, arr.get(i).substring(1, arr.get(i).length()));
         }
-
-        // maptoList
-        List<String> answer = new ArrayList<>();
-        for(int i = 'a'; i <= 'z'; i++) {
-            answer.addAll(map.get(String.valueOf((char)i)));
-        }
-
-        String[] arr = answer.toArray(new String[0]);
-        return arr;
+        
+        String[] answer = arr.toArray(new String[0]);
+       
+        return answer;
     }
 }
