@@ -4,6 +4,7 @@ class Solution {
         int time = 0;
         int count = 0;
         
+        
         for(int i = 0; i < attacks.length; i++) {
             for(int j = time; j < attacks[i][0]; j++) {
                 time++;
@@ -14,15 +15,9 @@ class Solution {
                 }else {
                     count++;
                     if(count % bandage[0] == 0){
-                        int total = bandage[1] + bandage[2]+ health;
-                        if(total > max){
-                            health = max;
-                        }else {
-                            health += bandage[1] + bandage[2];
-                        }
+                        health = Math.min(bandage[1] + bandage[2]+ health, max);
                     }else {
-                        health += bandage[1];
-                        if(health > max) health = max;
+                        health = Math.min(max, health += bandage[1]);
                     }
                 }
             }
