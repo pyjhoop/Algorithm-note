@@ -1,7 +1,7 @@
 class Solution {
     public int[] solution(String[] park, String[] routes) {
         // 2차원 배열 생성
-        String[][] square = new String[park.length][park[0].length()];
+        String[][] square = new String[park.length][park[0].length()]; // 배열 크기 수정
         // 2차원 배열 세팅 및 S의 위치를 찾는다
         int startX = 0;
         int startY = 0;
@@ -12,7 +12,7 @@ class Solution {
                     startX = j;
                     startY = i;
                 }
-                square[i][j] = strArr[j]; // 올바른 순서로 설정
+                square[i][j] = strArr[j];
             }
         }
 
@@ -25,39 +25,37 @@ class Solution {
             String direction = strArr[0];
             int step = Integer.parseInt(strArr[1]);
 
-            if (direction.equals("E") || direction.equals("W")) {
-                int finalX = direction.equals("E") ? startX + step : startX - step;
-                if (finalX >= xMax || finalX < 0) {
-                    continue;
-                } else {
-                    boolean flag = false;
-                    for (int k = 1; k <= step; k++) {
-                        int p = direction.equals("E") ? k : -k;
-                        if (square[startY][startX + p].equals("X")) {
-                            flag = true;
-                            break;
-                        }
-                    }
-                    if (flag) continue;
-                    startX = finalX;
+            int xPlus = 0;
+            int yPlus = 0;
+            boolean flag = false;
+
+            // 이동을 시도하기 전에 경계 조건을 먼저 확인합니다
+            for (int k = 1; k <= step; k++) {
+                switch (direction) {
+                    case "S": yPlus++; break;
+                    case "N": yPlus--; break;
+                    case "E": xPlus++; break;
+                    case "W": xPlus--; break;
                 }
-            } else {
-                int finalY = direction.equals("S") ? startY + step : startY - step;
-                if (finalY >= yMax || finalY < 0) {
-                    continue;
-                } else {
-                    boolean flag = false;
-                    for (int k = 1; k <= step; k++) {
-                        int p = direction.equals("S") ? k : -k;
-                        if (square[startY + p][startX].equals("X")) {
-                            flag = true;
-                            break;
-                        }
-                    }
-                    if (flag) continue;
-                    startY = finalY;
+
+                // 경계 조건을 먼저 확인합니다
+                if ((startX + xPlus) >= xMax || (startX + xPlus) < 0 || (startY + yPlus) >= yMax || (startY + yPlus) < 0) {
+                    flag = true;
+                    break;
+                }
+
+                // 장애물 확인
+                if (square[startY + yPlus][startX + xPlus].equals("X")) {
+                    flag = true;
+                    break;
                 }
             }
+
+            if (flag) continue; // 경계 조건 또는 장애물이 있는 경우 명령 무시
+
+            // 이동할 수 있으면 위치 업데이트
+            startY += yPlus;
+            startX += xPlus;
         }
 
         int[] answer = {startY, startX}; // (y, x) 순서로 반환
