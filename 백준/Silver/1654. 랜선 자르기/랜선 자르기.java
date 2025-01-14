@@ -1,50 +1,54 @@
-
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.Arrays;
+import java.io.*;
 import java.util.StringTokenizer;
 
 public class Main {
 
+    static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 
-    public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer st;
+    public static void main(String[] args) throws IOException{
 
-        st = new StringTokenizer(br.readLine());
+        // 입력
+        StringTokenizer st = new StringTokenizer(br.readLine(), " ");
+
         int K = Integer.parseInt(st.nextToken());
         int N = Integer.parseInt(st.nextToken());
 
-        int[] arr = new int[K];
-
-        for(int i = 0; i < K; i++){
-            arr[i] = Integer.parseInt(br.readLine());
-        }
-
-        Arrays.sort(arr);
-
-        long start = 1;
-        long end = arr[arr.length - 1];
+        int[] meters = new int[K];
         long max = 0;
 
-        while(start <= end) {
-            long mid = (start + end) / 2;
-
-            long count = 0;
-            for(int num : arr) {
-                count += num / mid;
-            }
-
-            if(count >= N) {
-                max = mid;
-                start = mid + 1;
-            }else {
-                end = mid - 1;
+        for(int i=0; i<K; i++) {
+            meters[i] = Integer.parseInt(br.readLine());
+            if(max < meters[i]) {
+                max = meters[i];
             }
         }
 
-        System.out.println(max);
+        // 로직
+        long cnt = 0;
+        long min = 1;
+
+        while(min <= max) {
+            cnt = 0;
+            long mid = (min + max) / 2;
+            for(int meter : meters) {
+                cnt += meter/mid;
+            }
+
+            if(cnt < N) {
+                max = mid -1;
+            }else {
+                min = mid + 1;
+            }
+        }
+
+        // 출력
+        bw.write(String.valueOf(min - 1));
+
+        bw.flush();
+        bw.close();
+        br.close();
+
     }
+
 }
